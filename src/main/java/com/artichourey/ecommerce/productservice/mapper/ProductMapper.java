@@ -13,7 +13,7 @@ public class ProductMapper {
 				brand(product.getBrand()).description(product.getDescription())
 				.imageUrl(product.getImageUrl()).price(product.getPrice())
 				.discountPrice(product.getDiscountPrice()).quantity(product.getQuantity())
-				.categoryId(product.getCategory().getId()).build();
+				.categoryId(product.getCategory() !=null ? product.getCategory().getId() : null).build();
 		
 		
 	}
