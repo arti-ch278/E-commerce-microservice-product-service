@@ -13,22 +13,25 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RestController;
 
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
 
+@Tag(name = "Product Images", description = "Endpoints for serving product images")
 @RestController
 @RequiredArgsConstructor
 public class ImageServeController {
 
-	private final String uploadDir=System.getProperty("user.dir")+"upload/products";
-	
-	@GetMapping("/products/images/{fileName}")
-	public ResponseEntity<Resource> getImages(@PathVariable String fileName)throws IOException{
-		Path path=Paths.get(uploadDir,fileName);
-		Resource resource= new UrlResource(path.toUri());
-		if(!resource.exists()) {
-			return ResponseEntity.notFound().build();
-			}
-		return ResponseEntity.ok().contentType(MediaType.IMAGE_JPEG).body(resource);
-		
-	}
+    private final String uploadDir = System.getProperty("user.dir") + "upload/products";
+
+    @Operation(summary = "Get product image by file name", description = "Retrieve product image by file name. Returns JPEG format.")
+    @GetMapping("/products/images/{fileName}")
+    public ResponseEntity<Resource> getImages(@PathVariable String fileName) throws IOException {
+        Path path = Paths.get(uploadDir, fileName);
+        Resource resource = new UrlResource(path.toUri());
+        if (!resource.exists()) {
+            return ResponseEntity.notFound().build();
+        }
+        return ResponseEntity.ok().contentType(MediaType.IMAGE_JPEG).body(resource);
+    }
 }
