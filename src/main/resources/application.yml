@@ -1,0 +1,12 @@
+springdoc:
+  api-docs:
+    enabled: true
+
+  group-configs:
+    - group: products
+      paths-to-match: /api/products/**
+
+    - group: categories
+      paths-to-match: /api/categories/**
+  swagger-ui:
+    path: /swagger-ui.html
