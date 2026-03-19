@@ -30,7 +30,7 @@ public class CategoryController {
 	private final CategoryService categoryService;
 	
 	@Operation(summary = "Create a category",description = "Create a new product category. JWT required.",security = @SecurityRequirement(name = "bearerAuth"))
-	@PostMapping("/")
+	@PostMapping
 	public ResponseEntity<CategoryDto> createCategory(@Valid @RequestBody CategoryDto categoryDto){
 		
 		
@@ -60,7 +60,7 @@ public class CategoryController {
 		
 	}
 	@Operation(summary = "Get all categories",description = "Retrieve all product categories")
-	@GetMapping("/")
+	@GetMapping
 	public ResponseEntity<List<CategoryDto>> getAllCategories(){
 		
 		return ResponseEntity.ok(categoryService.getAllCategories());
