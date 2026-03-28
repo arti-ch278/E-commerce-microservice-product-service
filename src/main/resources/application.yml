@@ -10,3 +10,6 @@ springdoc:
       paths-to-match: /api/categories/**
   swagger-ui:
     path: /swagger-ui.html
+  override-with-generic-response: false
+  default-produces-media-type: application/json
+  default-consumes-media-type: application/json
