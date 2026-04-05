@@ -20,7 +20,7 @@ public class OpenApiConfig {
     public OpenAPI productServiceAPI() {
 
         SecurityScheme securityScheme = new SecurityScheme()
-                .name("Authorization") // 🔥 IMPORTANT (not bearerAuth)
+                .name("Authorization") 
                 .type(SecurityScheme.Type.HTTP)
                 .scheme("bearer")
                 .bearerFormat("JWT");
@@ -31,7 +31,7 @@ public class OpenApiConfig {
                         .description("Product And Category management APIs for E-commerce Platform")
                         .version("1.0"))
 
-                // 🔥 THIS FIXES YOUR MAIN ISSUE (VERY IMPORTANT)
+              
                 .servers(List.of(new Server().url("/")))
 
                 .components(new Components()
