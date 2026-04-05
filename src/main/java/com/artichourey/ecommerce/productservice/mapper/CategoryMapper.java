@@ -17,7 +17,7 @@ public class CategoryMapper {
 		
 	}
 	public Category toEntity(CategoryDto dto) {
-		return Category.builder().id(dto.getId()).name(dto.getName())
+		return Category.builder().name(dto.getName())
 				.description(dto.getDescription()).parentId(dto.getParentId()).build();
 		
 	}
