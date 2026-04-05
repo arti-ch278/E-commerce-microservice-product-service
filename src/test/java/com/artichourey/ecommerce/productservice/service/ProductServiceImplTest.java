@@ -7,6 +7,7 @@ import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
+import java.math.BigDecimal;
 import java.util.List;
 import java.util.Optional;
 
@@ -45,8 +46,8 @@ public class ProductServiceImplTest {
         ProductDto dto = ProductDto.builder()
                 .name("Laptop")
                 .description("Gaming")
-                .price(1000)
-                .discountPrice(900)
+                .price(BigDecimal.valueOf(1000))
+                .discountPrice(BigDecimal.valueOf(900))
                 .quantity(5)
                 .categoryId(1L)
                 .build();

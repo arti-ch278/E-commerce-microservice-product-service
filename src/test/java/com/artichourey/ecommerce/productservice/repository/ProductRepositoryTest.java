@@ -2,6 +2,8 @@ package com.artichourey.ecommerce.productservice.repository;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
+import java.math.BigDecimal;
+
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
@@ -32,7 +34,7 @@ public class ProductRepositoryTest {
 	        Product product = Product.builder()
 	                .name("Laptop")
 	                .description("Gaming laptop")
-	                .price(1500)
+	                .price(BigDecimal.valueOf(1500))
 	                .category(category)
 	                .build();
 
@@ -56,14 +58,14 @@ public class ProductRepositoryTest {
 	        productRepository.save(Product.builder()
 	                .name("Cheap Phone")
 	                .description("Budget phone")
-	                .price(200)
+	                .price(BigDecimal.valueOf(200))
 	                .category(category)
 	                .build());
 
 	        productRepository.save(Product.builder()
 	                .name("Expensive Laptop")
 	                .description("High-end laptop")
-	                .price(2000)
+	                .price(BigDecimal.valueOf(2000))
 	                .category(category)
 	                .build());
 
