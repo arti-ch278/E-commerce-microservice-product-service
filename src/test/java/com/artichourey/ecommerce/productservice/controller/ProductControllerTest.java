@@ -15,6 +15,7 @@ import static org.springframework.test.web.servlet.request.MockMvcRequestBuilder
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.put;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
+import java.math.BigDecimal;
 import java.util.List;
 
 import org.junit.jupiter.api.Test;
@@ -50,7 +51,7 @@ public class ProductControllerTest {
 	        ProductDto dto = ProductDto.builder()
 	                .name("Laptop")
 	                .description("Gaming")
-	                .price(1000)
+	                .price(BigDecimal.valueOf(1000))
 	                .quantity(5)
 	                .categoryId(1L)
 	                .build();
@@ -78,7 +79,7 @@ public class ProductControllerTest {
 	        ProductDto dto = ProductDto.builder()
 	                .name("Updated Laptop")
 	                .description("Gaming")
-	                .price(1200)
+	                .price(BigDecimal.valueOf(1200))
 	                .quantity(10)
 	                .categoryId(1L)
 	                .build();
