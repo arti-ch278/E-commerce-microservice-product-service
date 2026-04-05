@@ -15,17 +15,12 @@ import org.springframework.web.bind.annotation.RestControllerAdvice;
 @RestControllerAdvice
 public class GlobalExceptionHandler {
 	
-	
-	
 	@ExceptionHandler(ResourceNotFoundException.class)
 	public ResponseEntity<Map<String,Object>> handleResourceNotFoundException(ResourceNotFoundException ex){
 		Map<String,Object> m= Map.of( "error", "Not Found",
 			    "message", ex.getMessage(),
 			    "timestamp", Instant.now());
-		
-		
 		return ResponseEntity.status(HttpStatus.NOT_FOUND).body(m);
-		
 	}
 	
 	@ExceptionHandler(MethodArgumentNotValidException.class)
@@ -36,16 +31,14 @@ public class GlobalExceptionHandler {
 				"details",error,
 				"timestamp", Instant.now());
 		
-		return ResponseEntity.badRequest().body(body);
-		
+		return ResponseEntity.badRequest().body(body);	
 	}
 	
 	@ExceptionHandler(Exception.class)
 	public ResponseEntity<Map<String,Object>> handleAllException(Exception ex){
 		Map<String,Object>m=Map.of("error","Internal Server Error",
 				"message", ex.getMessage(),
-				"timestamp", Instant.now());
-		
+				"timestamp", Instant.now());	
 		return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(m);
 		
 	}
