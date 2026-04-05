@@ -1,3 +1,16 @@
+
+management:
+  tracing:
+    sampling:
+      probability: 1.0
+spring:
+  zipkin:
+    base-url: http://localhost:9411
+    enabled: true
+logging:
+  pattern:
+    console: "%d{yyyy-MM-dd HH:mm:ss} [%thread] [%X{traceId},%X{spanId}] %-5level %logger - %msg%n"
+
 springdoc:
   api-docs:
     enabled: true
@@ -13,3 +26,6 @@ springdoc:
   override-with-generic-response: false
   default-produces-media-type: application/json
   default-consumes-media-type: application/json
+
+file:
+  upload-dir: ${PRODUCT_IMAGE_DIR:E:/E-Commerce_microservices/product-serviceuploads/products}
