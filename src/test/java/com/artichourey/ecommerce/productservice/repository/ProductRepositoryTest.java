@@ -35,7 +35,9 @@ public class ProductRepositoryTest {
 	                .name("Laptop")
 	                .description("Gaming laptop")
 	                .price(BigDecimal.valueOf(1500))
+	                .skuCode("lap-123-00")
 	                .category(category)
+	                
 	                .build();
 
 	        productRepository.save(product);
@@ -59,6 +61,7 @@ public class ProductRepositoryTest {
 	                .name("Cheap Phone")
 	                .description("Budget phone")
 	                .price(BigDecimal.valueOf(200))
+	                .skuCode("ph-123-00")
 	                .category(category)
 	                .build());
 
@@ -66,6 +69,7 @@ public class ProductRepositoryTest {
 	                .name("Expensive Laptop")
 	                .description("High-end laptop")
 	                .price(BigDecimal.valueOf(2000))
+	                .skuCode("exlap-123-00")
 	                .category(category)
 	                .build());
 
