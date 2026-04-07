@@ -54,6 +54,7 @@ public class ProductControllerTest {
 	                .price(BigDecimal.valueOf(1000))
 	                .quantity(5)
 	                .categoryId(1L)
+	                .skuCode("lap-123-00")
 	                .build();
 
 	        when(productService.createProduct(any()))
@@ -82,6 +83,7 @@ public class ProductControllerTest {
 	                .price(BigDecimal.valueOf(1200))
 	                .quantity(10)
 	                .categoryId(1L)
+	                .skuCode("lap-123-00")
 	                .build();
 
 	        when(productService.updateProduct(eq(1L), any()))
