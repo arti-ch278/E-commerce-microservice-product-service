@@ -8,6 +8,7 @@ import static org.springframework.test.web.servlet.request.MockMvcRequestBuilder
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.put;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
@@ -26,10 +27,10 @@ import com.artichourey.ecommerce.productservice.service.CategoryService;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
 @WebMvcTest(CategoryController.class)
-@AutoConfigureMockMvc(addFilters = false)
-public class CategoryControllerTest {
-	
-	@Autowired
+@AutoConfigureMockMvc(addFilters = false) // disable security filters for unit test
+class CategoryControllerTest {
+
+    @Autowired
     private MockMvc mockMvc;
 
     @MockBean
@@ -37,69 +38,101 @@ public class CategoryControllerTest {
 
     @Autowired
     private ObjectMapper objectMapper;
-    
+
     @Test
     void createCategory_ShouldReturnCreated() throws Exception {
-
-        CategoryDto dto = CategoryDto.builder()
+        // Arrange
+        CategoryDto requestDto = CategoryDto.builder()
                 .name("Electronics")
                 .description("All electronic items")
                 .build();
 
-        when(categoryService.createDto(any()))
-                .thenReturn(dto);
+        CategoryDto responseDto = CategoryDto.builder()
+                .id(1L)
+                .name("Electronics")
+                .description("All electronic items")
+                .build();
 
-        mockMvc.perform(post("/api/categories/")
+        when(categoryService.createDto(any(CategoryDto.class))).thenReturn(responseDto);
+
+        // Act & Assert
+        mockMvc.perform(post("/api/categories") // NO trailing slash
                 .contentType(MediaType.APPLICATION_JSON)
-                .content(objectMapper.writeValueAsString(dto)))
-                .andExpect(status().isCreated());
+                .content(objectMapper.writeValueAsString(requestDto)))
+                .andExpect(status().isCreated())
+                .andExpect(jsonPath("$.id").value(1L))
+                .andExpect(jsonPath("$.name").value("Electronics"))
+                .andExpect(jsonPath("$.description").value("All electronic items"));
     }
+
     @Test
     void updateCategory_ShouldReturnOk() throws Exception {
+        CategoryDto requestDto = new CategoryDto();
+        requestDto.setName("Electronics");
+        requestDto.setDescription("Updated category");
 
-        CategoryDto request = new CategoryDto();
-        request.setName("Electronics");
-        request.setDescription("Updated category");
+        CategoryDto responseDto = new CategoryDto();
+        responseDto.setId(1L);
+        responseDto.setName("Electronics");
+        responseDto.setDescription("Updated category");
 
-        CategoryDto response = new CategoryDto();
-        response.setId(1L);
-        response.setName("Electronics");
-
-        when(categoryService.updateDto(eq(1L), any(CategoryDto.class)))
-                .thenReturn(response);
+        when(categoryService.updateDto(eq(1L), any(CategoryDto.class))).thenReturn(responseDto);
 
         mockMvc.perform(put("/api/categories/1")
                 .contentType(MediaType.APPLICATION_JSON)
-                .content(objectMapper.writeValueAsString(request)))
+                .content(objectMapper.writeValueAsString(requestDto)))
                 .andExpect(status().isOk())
-                .andExpect(jsonPath("$.name").value("Electronics"));
+                .andExpect(jsonPath("$.id").value(1L))
+                .andExpect(jsonPath("$.name").value("Electronics"))
+                .andExpect(jsonPath("$.description").value("Updated category"));
     }
-    
+
     @Test
     void deleteCategory_ShouldReturnOk() throws Exception {
-
         doNothing().when(categoryService).deleteCategoryById(1L);
 
         mockMvc.perform(delete("/api/categories/1"))
-                .andExpect(status().isOk());
+                .andExpect(status().isOk())
+                .andExpect(content().string("category deleted succsessfully"));
     }
+
     @Test
     void getCategory_ShouldReturnOk() throws Exception {
+        CategoryDto responseDto = CategoryDto.builder()
+                .id(1L)
+                .name("Electronics")
+                .description("All electronic items")
+                .build();
 
-        when(categoryService.getCategory(1L))
-                .thenReturn(new CategoryDto());
+        when(categoryService.getCategory(1L)).thenReturn(responseDto);
 
         mockMvc.perform(get("/api/categories/1"))
-                .andExpect(status().isOk());
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.id").value(1L))
+                .andExpect(jsonPath("$.name").value("Electronics"))
+                .andExpect(jsonPath("$.description").value("All electronic items"));
     }
-    
+
     @Test
     void getAllCategories_ShouldReturnList() throws Exception {
+        CategoryDto category1 = CategoryDto.builder()
+                .id(1L)
+                .name("Electronics")
+                .description("All electronic items")
+                .build();
 
-        when(categoryService.getAllCategories())
-                .thenReturn(List.of(new CategoryDto()));
+        CategoryDto category2 = CategoryDto.builder()
+                .id(2L)
+                .name("Books")
+                .description("All kinds of books")
+                .build();
 
-        mockMvc.perform(get("/api/categories/"))
-                .andExpect(status().isOk());
+        when(categoryService.getAllCategories()).thenReturn(List.of(category1, category2));
+
+        mockMvc.perform(get("/api/categories"))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.length()").value(2))
+                .andExpect(jsonPath("$[0].name").value("Electronics"))
+                .andExpect(jsonPath("$[1].name").value("Books"));
     }
 }
