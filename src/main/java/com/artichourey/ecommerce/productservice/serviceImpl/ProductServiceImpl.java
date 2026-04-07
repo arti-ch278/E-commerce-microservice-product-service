@@ -37,8 +37,6 @@ public class ProductServiceImpl implements ProductService {
 	
 	private final String uploadDir=System.getProperty("user.dir")+"uploads/products/";
 	
-	
-	
 	@Override
 	public ProductDto createProduct(ProductDto productDto) {
 		log.info("Creating product: name='{}', categoryId={}", productDto.getName(), productDto.getCategoryId());
@@ -66,6 +64,7 @@ public class ProductServiceImpl implements ProductService {
 		product.setDiscountPrice(productDto.getDiscountPrice());
 		product.setQuantity(productDto.getQuantity());
 		product.setImageUrl(productDto.getImageUrl());
+		product.setSkuCode(productDto.getSkuCode());
 		if(productDto.getCategoryId()!=null) {
 			Category category= new Category();
 			category.setId(productDto.getCategoryId());
@@ -73,7 +72,7 @@ public class ProductServiceImpl implements ProductService {
 		}
 		
 	 Product saved=productRepository.save(product);
-	 log.info("Product updated successfully: ID={}, name='{}'", saved.getId(), saved.getName());
+	 log.info("Product updated successfully: ID={}, name='{}'", saved.getId(), saved.getName(), saved.getSkuCode());
 		return productMapper.toDto(saved);
 	}
 
@@ -81,7 +80,7 @@ public class ProductServiceImpl implements ProductService {
 	public void deleteProduct(Long id) {
 		log.info("Deleting product with ID={}", id);
 		Product product=productRepository.findById(id).orElseThrow(()-> new ResourceNotFoundException("Product not found"+id));
-		log.info("Product deleted successfully: ID={}, name='{}'", product.getId(), product.getName());
+		log.info("Product deleted successfully: ID={}, name='{}'", product.getId(), product.getName(), product.getSkuCode());
         productRepository.delete(product);
          
          
@@ -91,7 +90,7 @@ public class ProductServiceImpl implements ProductService {
 	public ProductDto getProductById(Long id) {
 		log.info("Fetching product with ID={}", id);
 		Product product=productRepository.findById(id).orElseThrow(()->new ResourceNotFoundException("Product not found"+id));
-		log.info("Product fetched successfully: ID={}, name='{}'", product.getId(), product.getName());
+		log.info("Product fetched successfully: ID={}, name='{}'", product.getId(), product.getName(), product.getSkuCode());
 		return productMapper.toDto(product);
 	}
 

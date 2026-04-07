@@ -1,8 +1,8 @@
 package com.artichourey.ecommerce.productservice.entity;
 
+import java.util.ArrayList;
 import java.util.List;
-
-import jakarta.persistence.CascadeType;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
@@ -29,7 +29,8 @@ public class Category {
 	private String description;
 	private Long parentId;
 	
-	@OneToMany(mappedBy="category",cascade=CascadeType.ALL)
-	private List<Product> product;
+	@OneToMany(mappedBy="category")
+	@JsonIgnore
+	private List<Product> product= new ArrayList<>();
 
 }

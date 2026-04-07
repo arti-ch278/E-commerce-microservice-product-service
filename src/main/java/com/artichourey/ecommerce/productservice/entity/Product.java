@@ -1,7 +1,7 @@
 package com.artichourey.ecommerce.productservice.entity;
 
+import java.math.BigDecimal;
 import java.time.LocalDateTime;
-
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
@@ -32,12 +32,14 @@ public class Product {
 	@Column(length=2000)
 	private String description;
 	@Column(nullable=false)
-	private double price;
-	private double discountPrice;
+	private BigDecimal price;
+	private BigDecimal discountPrice;
 	private int quantity;
 	private String brand;
 	private String imageUrl;
 	
+	@Column(nullable=false, unique=true)
+	private String skuCode;
 	@ManyToOne
 	@JoinColumn(name="category_id")
 	private Category category;
