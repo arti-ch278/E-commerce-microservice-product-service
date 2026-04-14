@@ -13,8 +13,8 @@ import lombok.NoArgsConstructor;
 @Builder
 @Schema(description = "Category DTO for product categories")
 public class CategoryDto {
-	@Schema(description = "Category ID", example = "1")
-	private Long id;
+//	@Schema(description = "Category ID", example = "1")
+//	private Long id;
 	
 	@NotBlank(message="category name can not be empty")
 	@Schema(description = "Category name", example = "Electronics", required = true)
