@@ -1,15 +1,21 @@
+eureka:
+  client:
+    service-url:
+      defaultZone: ${EUREKA_URL:http://localhost:8761/eureka}
 
 management:
   tracing:
     sampling:
       probability: 1.0
+
 spring:
   zipkin:
-    base-url: http://localhost:9411
+    base-url: ${ZIPKIN_URL:http://localhost:9411}
     enabled: true
-logging:
-  pattern:
-    console: "%d{yyyy-MM-dd HH:mm:ss} [%thread] [%X{traceId},%X{spanId}] %-5level %logger - %msg%n"
+
+#logging:
+ # pattern:
+  #  console: "%d{yyyy-MM-dd HH:mm:ss} [%thread] [%X{traceId},%X{spanId}] %-5level %logger - %msg%n"
 
 springdoc:
   api-docs:
@@ -21,6 +27,7 @@ springdoc:
 
     - group: categories
       paths-to-match: /api/categories/**
+
   swagger-ui:
     path: /swagger-ui.html
   override-with-generic-response: false
@@ -28,4 +35,4 @@ springdoc:
   default-consumes-media-type: application/json
 
 file:
-  upload-dir: ${PRODUCT_IMAGE_DIR:E:/E-Commerce_microservices/product-serviceuploads/products}
+  upload-dir: ${PRODUCT_IMAGE_DIR:/app/uploads}
