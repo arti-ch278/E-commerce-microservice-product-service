@@ -20,8 +20,8 @@ import lombok.NoArgsConstructor;
 @Schema(description = "Product DTO for product management")
 public class ProductDto {
 	
-	@Schema(description = "Product ID", example = "1")
-	private Long id;
+//	@Schema(description = "Product ID", example = "1")
+//	private Long id;
 
     @NotBlank(message="product name is required")
     @Schema(description = "Name of the product", example = "iPhone 14", required = true)
