@@ -3,14 +3,15 @@ package com.artichourey.ecommerce.productservice.mapper;
 import org.springframework.stereotype.Component;
 
 import com.artichourey.ecommerce.productservice.dtos.ProductDto;
+import com.artichourey.ecommerce.productservice.dtos.ProductResponseDto;
 import com.artichourey.ecommerce.productservice.entity.Category;
 import com.artichourey.ecommerce.productservice.entity.Product;
 
 @Component
 public class ProductMapper {
 
-    public ProductDto toDto(Product product) {
-        return ProductDto.builder()
+    public ProductResponseDto toDto(Product product) {
+        return ProductResponseDto.builder()
                 .id(product.getId())
                 .name(product.getName())
                 .brand(product.getBrand())
@@ -26,7 +27,7 @@ public class ProductMapper {
 
     public Product toEntity(ProductDto dto, Category category) {
         return Product.builder()
-                .id(dto.getId())
+               // .id(dto.getId())
                 .name(dto.getName())
                 .brand(dto.getBrand())
                 .description(dto.getDescription())

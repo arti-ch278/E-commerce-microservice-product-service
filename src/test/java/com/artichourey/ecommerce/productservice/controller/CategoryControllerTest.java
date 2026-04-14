@@ -23,6 +23,7 @@ import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
 
 import com.artichourey.ecommerce.productservice.dtos.CategoryDto;
+import com.artichourey.ecommerce.productservice.dtos.CategoryResponseDto;
 import com.artichourey.ecommerce.productservice.service.CategoryService;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
@@ -47,7 +48,7 @@ class CategoryControllerTest {
                 .description("All electronic items")
                 .build();
 
-        CategoryDto responseDto = CategoryDto.builder()
+        CategoryResponseDto responseDto = CategoryResponseDto.builder()
                 .id(1L)
                 .name("Electronics")
                 .description("All electronic items")
@@ -71,7 +72,7 @@ class CategoryControllerTest {
         requestDto.setName("Electronics");
         requestDto.setDescription("Updated category");
 
-        CategoryDto responseDto = new CategoryDto();
+        CategoryResponseDto responseDto = new CategoryResponseDto();
         responseDto.setId(1L);
         responseDto.setName("Electronics");
         responseDto.setDescription("Updated category");
@@ -98,7 +99,7 @@ class CategoryControllerTest {
 
     @Test
     void getCategory_ShouldReturnOk() throws Exception {
-        CategoryDto responseDto = CategoryDto.builder()
+        CategoryResponseDto responseDto = CategoryResponseDto.builder()
                 .id(1L)
                 .name("Electronics")
                 .description("All electronic items")
@@ -115,13 +116,13 @@ class CategoryControllerTest {
 
     @Test
     void getAllCategories_ShouldReturnList() throws Exception {
-        CategoryDto category1 = CategoryDto.builder()
+        CategoryResponseDto category1 = CategoryResponseDto.builder()
                 .id(1L)
                 .name("Electronics")
                 .description("All electronic items")
                 .build();
 
-        CategoryDto category2 = CategoryDto.builder()
+        CategoryResponseDto category2 = CategoryResponseDto.builder()
                 .id(2L)
                 .name("Books")
                 .description("All kinds of books")

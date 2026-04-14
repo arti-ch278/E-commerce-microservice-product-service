@@ -14,6 +14,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.artichourey.ecommerce.productservice.dtos.CategoryDto;
+import com.artichourey.ecommerce.productservice.dtos.CategoryResponseDto;
 import com.artichourey.ecommerce.productservice.service.CategoryService;
 import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import io.swagger.v3.oas.annotations.Operation;
@@ -31,7 +32,7 @@ public class CategoryController {
 	
 	@Operation(summary = "Create a category",description = "Create a new product category. JWT required.",security = @SecurityRequirement(name = "bearerAuth"))
 	@PostMapping
-	public ResponseEntity<CategoryDto> createCategory(@Valid @RequestBody CategoryDto categoryDto){
+	public ResponseEntity<CategoryResponseDto> createCategory(@Valid @RequestBody CategoryDto categoryDto){
 		
 		
 		return new ResponseEntity<>(categoryService.createDto(categoryDto),HttpStatus.CREATED);
@@ -39,7 +40,7 @@ public class CategoryController {
 	}
 	@Operation(summary = "Update a category", security = @SecurityRequirement(name = "bearerAuth"))
 	@PutMapping("/{id}")
-	public ResponseEntity<CategoryDto> updateCategory(@PathVariable Long id ,@Valid @RequestBody CategoryDto categoryDto){
+	public ResponseEntity<CategoryResponseDto> updateCategory(@PathVariable Long id ,@Valid @RequestBody CategoryDto categoryDto){
 		
 		return ResponseEntity.ok(categoryService.updateDto(id, categoryDto));
 		
@@ -54,14 +55,14 @@ public class CategoryController {
 	}
 	@Operation(summary = "Get a category by ID")
 	@GetMapping("/{id}")
-	public ResponseEntity<CategoryDto> getCategory(@PathVariable Long id){
+	public ResponseEntity<CategoryResponseDto> getCategory(@PathVariable Long id){
 		
 		return ResponseEntity.ok(categoryService.getCategory(id));
 		
 	}
 	@Operation(summary = "Get all categories",description = "Retrieve all product categories")
 	@GetMapping
-	public ResponseEntity<List<CategoryDto>> getAllCategories(){
+	public ResponseEntity<List<CategoryResponseDto>> getAllCategories(){
 		
 		return ResponseEntity.ok(categoryService.getAllCategories());
 	}
