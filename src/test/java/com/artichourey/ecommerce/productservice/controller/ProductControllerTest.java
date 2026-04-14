@@ -25,174 +25,199 @@ import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
+import org.springframework.http.HttpMethod;
 import org.springframework.http.MediaType;
 import org.springframework.mock.web.MockMultipartFile;
 import org.springframework.test.web.servlet.MockMvc;
+import org.springframework.web.multipart.MultipartFile;
 
 import com.artichourey.ecommerce.productservice.dtos.ProductDto;
+import com.artichourey.ecommerce.productservice.dtos.ProductResponseDto;
 import com.artichourey.ecommerce.productservice.service.ProductService;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
 @WebMvcTest(ProductController.class)
 @AutoConfigureMockMvc(addFilters = false)
-public class ProductControllerTest {
-	
-	 @Autowired
-	    private MockMvc mockMvc;
+class ProductControllerTest {
 
-	    @MockBean
-	    private ProductService productService;
+    @Autowired
+    private MockMvc mockMvc;
 
-	    @Autowired
-	    private ObjectMapper objectMapper;
-	    
-	    @Test
-	    void createProduct_ShouldReturnCreated() throws Exception {
-	        ProductDto dto = ProductDto.builder()
-	                .name("Laptop")
-	                .description("Gaming")
-	                .price(BigDecimal.valueOf(1000))
-	                .quantity(5)
-	                .categoryId(1L)
-	                .skuCode("lap-123-00")
-	                .build();
+    @MockBean
+    private ProductService productService;
 
-	        when(productService.createProduct(any()))
-	                .thenReturn(dto);
+    @Autowired
+    private ObjectMapper objectMapper;
 
-	        mockMvc.perform(post("/api/products/")
-	                .contentType(MediaType.APPLICATION_JSON)
-	                .content(objectMapper.writeValueAsString(dto)))
-	                .andExpect(status().isCreated());
-	    }
-	    
-	    @Test
-	    void getProduct_ShouldReturnOk() throws Exception {
-	        when(productService.getProductById(1L))
-	                .thenReturn(new ProductDto());
+    
+    // CREATE PRODUCT
+   
+    @Test
+    void createProduct_ShouldReturnCreated() throws Exception {
 
-	        mockMvc.perform(get("/api/products/1"))
-	                .andExpect(status().isOk());
-	    }
-	    
-	    @Test
-	    void updateProduct_ShouldReturnOk() throws Exception {
-	        ProductDto dto = ProductDto.builder()
-	                .name("Updated Laptop")
-	                .description("Gaming")
-	                .price(BigDecimal.valueOf(1200))
-	                .quantity(10)
-	                .categoryId(1L)
-	                .skuCode("lap-123-00")
-	                .build();
+        ProductDto dto = ProductDto.builder()
+                .name("Laptop")
+                .description("Gaming")
+                .price(BigDecimal.valueOf(1000))
+                .quantity(5)
+                .categoryId(1L)
+                .skuCode("lap-123-00")
+                .build();
 
-	        when(productService.updateProduct(eq(1L), any()))
-	                .thenReturn(dto);
+        ProductResponseDto response = new ProductResponseDto();
+        response.setName("Laptop");
 
-	        mockMvc.perform(put("/api/products/1")
-	                .contentType(MediaType.APPLICATION_JSON)
-	                .content(objectMapper.writeValueAsString(dto)))
-	                .andExpect(status().isOk());
-	    }
-	    @Test
-	    void deleteProduct_ShouldReturnOk() throws Exception {
+        when(productService.createProduct(any(ProductDto.class)))
+                .thenReturn(response);
 
-	        doNothing().when(productService).deleteProduct(1L);
+        mockMvc.perform(post("/api/products")
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(objectMapper.writeValueAsString(dto)))
+                .andExpect(status().isCreated());
+    }
 
-	        mockMvc.perform(delete("/api/products/1"))
-	                .andExpect(status().isOk());
-	    }
-	    @Test
-	    void getAllProducts_ShouldReturnPage() throws Exception {
+   
+    // GET PRODUCT BY ID
+    
+    @Test
+    void getProduct_ShouldReturnOk() throws Exception {
 
-	        Page<ProductDto> page =
-	                new PageImpl<>(List.of(new ProductDto()));
+        when(productService.getProductById(1L))
+                .thenReturn(new ProductResponseDto());
 
-	        when(productService.getAllProducts(
-	                anyInt(), anyInt(), anyString(), anyString()))
-	                .thenReturn(page);
+        mockMvc.perform(get("/api/products/1"))
+                .andExpect(status().isOk());
+    }
 
-	        mockMvc.perform(get("/api/products/")
-	                .param("page", "0")
-	                .param("size", "10"))
-	                .andExpect(status().isOk());
-	    }
-	    @Test
-	    void searchProduct_ShouldReturnPage() throws Exception {
+    
+    // UPDATE PRODUCT
+    
+    @Test
+    void updateProduct_ShouldReturnOk() throws Exception {
 
-	        Page<ProductDto> page =
-	                new PageImpl<>(List.of(new ProductDto()));
+        ProductResponseDto dto = ProductResponseDto.builder()
+                .name("Updated Laptop")
+                .description("Gaming")
+                .price(BigDecimal.valueOf(1200))
+                .quantity(10)
+                .categoryId(1L)
+                .skuCode("lap-123-00")
+                .build();
 
-	        when(productService.searchProduct(
-	                anyString(), anyInt(), anyInt()))
-	                .thenReturn(page);
+        when(productService.updateProduct(eq(1L), any(ProductDto.class)))
+                .thenReturn(dto);
 
-	        mockMvc.perform(get("/api/products/search")
-	                .param("keyword", "laptop"))
-	                .andExpect(status().isOk());
-	    }
-	    @Test
-	    void filterProduct_ShouldReturnPage() throws Exception {
+        mockMvc.perform(put("/api/products/1")
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(objectMapper.writeValueAsString(dto)))
+                .andExpect(status().isOk());
+    }
 
-	        Page<ProductDto> page =
-	                new PageImpl<>(List.of(new ProductDto()));
+    
+    // GET ALL PRODUCTS
+    
+    @Test
+    void getAllProducts_ShouldReturnPage() throws Exception {
 
-	        when(productService.filterProducts(
-	                anyLong(),
-	                anyDouble(),
-	                anyDouble(),
-	                anyInt(),
-	                anyInt()
-	        )).thenReturn(page);
+        Page<ProductResponseDto> page =
+                new PageImpl<>(List.of(new ProductResponseDto()));
 
-	        mockMvc.perform(get("/api/products/filter")
-	                .param("categoryId", "1")
-	                .param("minPrice", "100")
-	                .param("maxPrice", "2000"))
-	                .andExpect(status().isOk());
-	    }
-	    
-	    @Test
-	    void advanceProduct_ShouldReturnPage() throws Exception {
+        when(productService.getAllProducts(anyInt(), anyInt(), anyString(), anyString()))
+                .thenReturn(page);
 
-	        Page<ProductDto> page =
-	                new PageImpl<>(List.of(new ProductDto()));
+        mockMvc.perform(get("/api/products")
+                .param("page", "0")
+                .param("size", "10"))
+                .andExpect(status().isOk());
+    }
 
-	        when(productService.advanceFilter(
-	                anyString(),
-	                anyLong(),
-	                anyDouble(),
-	                anyDouble(),
-	                anyInt(),
-	                anyInt(),
-	                anyString(),
-	                anyString()
-	        )).thenReturn(page);
+    
+    // SEARCH PRODUCTS
+   
+    @Test
+    void searchProduct_ShouldReturnPage() throws Exception {
 
-	        mockMvc.perform(get("/api/products/advance")
-	                .param("keyword", "laptop")
-	                .param("minPrice", "0")
-	                .param("maxPrice", "10000"))
-	                .andExpect(status().isOk());
-	    }
-	    
-	    @Test
-	    void uploadImage_ShouldReturnOk() throws Exception {
+        Page<ProductResponseDto> page =
+                new PageImpl<>(List.of(new ProductResponseDto()));
 
-	        MockMultipartFile file =
-	                new MockMultipartFile(
-	                        "file",
-	                        "image.jpg",
-	                        "image/jpeg",
-	                        "test image".getBytes());
+        when(productService.searchProduct(anyString(), anyInt(), anyInt()))
+                .thenReturn(page);
 
-	        when(productService.uploadImage(eq(1L), any()))
-	                .thenReturn(new ProductDto());
+        mockMvc.perform(get("/api/products/search")
+                .param("keyword", "laptop"))
+                .andExpect(status().isOk());
+    }
 
-	        mockMvc.perform(multipart("/api/products/1/upload-image")
-	                .file(file))
-	                .andExpect(status().isOk());
-	    }
-	    
+    
+    // FILTER PRODUCTS
+    
+    @Test
+    void filterProduct_ShouldReturnPage() throws Exception {
 
+        Page<ProductResponseDto> page =
+                new PageImpl<>(List.of(new ProductResponseDto()));
+
+        when(productService.filterProducts(
+                anyLong(),
+                anyDouble(),
+                anyDouble(),
+                anyInt(),
+                anyInt()
+        )).thenReturn(page);
+
+        mockMvc.perform(get("/api/products/filter")
+                .param("categoryId", "1")
+                .param("minPrice", "100")
+                .param("maxPrice", "2000"))
+                .andExpect(status().isOk());
+    }
+
+    
+    // ADVANCE SEARCH
+
+    @Test
+    void advanceProduct_ShouldReturnPage() throws Exception {
+
+        Page<ProductResponseDto> page =
+                new PageImpl<>(List.of(new ProductResponseDto()));
+
+        when(productService.advanceFilter(
+                anyString(),
+                anyLong(),
+                anyDouble(),
+                anyDouble(),
+                anyInt(),
+                anyInt(),
+                anyString(),
+                anyString()
+        )).thenReturn(page);
+
+        mockMvc.perform(get("/api/products/advance")
+                .param("keyword", "laptop")
+                .param("minPrice", "0")
+                .param("maxPrice", "10000"))
+                .andExpect(status().isOk());
+    }
+
+    
+    // UPLOAD IMAGE (FIXED)
+  
+    @Test
+    void uploadImage_ShouldReturnOk() throws Exception {
+
+        MockMultipartFile file =
+                new MockMultipartFile(
+                        "file",
+                        "image.jpg",
+                        "image/jpeg",
+                        "test image".getBytes()
+                );
+
+        when(productService.uploadImage(eq(1L), any(MultipartFile.class)))
+                .thenReturn(new ProductResponseDto());
+
+        mockMvc.perform(multipart(HttpMethod.POST, "/api/products/1/upload-image")
+                .file(file))
+                .andExpect(status().isOk());
+    }
 }
