@@ -10,8 +10,10 @@ management:
 
 spring:
   zipkin:
-    base-url: ${ZIPKIN_URL:http://localhost:9411}
-    enabled: true
+    tracing:
+      endpoint: ${ZIPKIN_URL:http://zipkin:9411/api/v2/spans}
+   # base-url: ${ZIPKIN_URL:http://localhost:9411}
+   # enabled: true
 
 #logging:
  # pattern:
